@@ -1,0 +1,89 @@
+{% load static %}
+<html >
+<head>
+	<title>Интересный сайт</title>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" media="all" />
+	<link rel="shortcut icon" href="css/images/favicon.ico" />
+</head>
+<body>
+<div class="shell">
+	<div class="border">
+
+		<div id="navigation">
+			<ul>
+			    <li><a href="/" class="active">Главная</a></li>
+			    <li><a href="/admin">Админ панель</a></li>
+
+			</ul>
+		</div>
+
+		<div id="main">
+			<div id="content" class="left">
+
+				<div class="projects">
+					<h2>{{ single.title }}</h2>
+					<p>
+						<img src="{{ single.img.url }}" width="80%"/>
+					</p>
+					<div class="item">
+						  <div class="text left">
+							  <hr><p>{{ single.description }}</p>
+							  <h5>Автор: {{ single.author }}</h5>
+							  <hr>
+						  </div>
+						  <div class="cl">&nbsp;</div>
+					</div>
+				</div>
+			</div>
+			<div class="likes">
+				<br>
+			    <p>Понравилось: {{ single.likes_set.all.count }}</p>
+			    <br>
+			    <a href="{% url 'add_like' single.id %}">Лайк |</a>
+			    <a href="{% url 'delete_like' single.id %}">Дизлайк</a>
+				<br>
+			</div>
+			<div class="comment">
+                <h5>ОСТАВИТЬ КОММЕНТАРИЙ</h5>
+                <div>
+					<form action="{% url 'add_comment' single.id %}" method="post">
+                        {% csrf_token %}
+                        <div>
+                            <label>Ваш комментарий:</label>
+                            <textarea name="text_comments"></textarea>
+                        </div>
+						<div>
+                            <label>Ваше имя *</label>
+                            <input type="text" name="name">
+                        </div>
+                        <div>
+                            <label>Ваша почта *</label>
+                            <input type="email" name="email">
+                        </div>
+                        <div><input type="submit"></div>
+                    </form>
+                </div>
+            </div>
+            <div>
+                {% for comment in single.comment_set.all %}
+                <div class="view-comment">
+                    <h4>{{ comment.name }}</h4>
+                    <p>
+                        {{ comment.text_comments }}
+                    </p>
+                </div>
+                {% endfor %}
+            </div>
+			<div class="cl">&nbsp;</div>
+		</div>
+
+
+	</div>
+
+	<div id="footer">
+		<p class="copy right">Copyright &copy; 2024 </p>
+	</div>
+</div>
+</body>
+</html>
